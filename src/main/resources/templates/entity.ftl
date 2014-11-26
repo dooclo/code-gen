@@ -1,0 +1,5 @@
+${basePackage!}
+
+#{targetDir}
+
+${author!}
