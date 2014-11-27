@@ -22,11 +22,10 @@ public class TemplateCfgManager {
         }
         cfg = new Configuration();
         try {
-            cfg.setDirectoryForTemplateLoading(new File("templates"));
-
             org.apache.commons.configuration.Configuration conf = new PropertiesConfiguration("conf/gen-conf.properties");
+            cfg.setDirectoryForTemplateLoading(new File(conf.getString("templateDir")));
             cfg.setSharedVariable("basePackage",conf.getString("basePackage",""));
-            cfg.setSharedVariable("targetDir",conf.getString("targetDir", System.getProperty("user.dir")));
+            cfg.setSharedVariable("targetDir",conf.getString("targetDir", System.getProperty("user.home") + File.separator + "output"));
             cfg.setSharedVariable("author",System.getProperty("user.name"));
             cfg.setObjectWrapper(new DefaultObjectWrapper());
 

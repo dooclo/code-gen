@@ -4,7 +4,9 @@ import com.dooclo.gen.base.ConnectionManager;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by IvanMa on 2014/11/25.
@@ -15,6 +17,11 @@ public class TableMetaInfo {
     private String tableName;
     private List<MetaData> metaDataList;
     private String className;
+    private Set<String> propertyTypeSet;
+
+    public Set<String> getPropertyTypeSet() {
+        return propertyTypeSet;
+    }
 
     public String getDbName() {
         return dbName;
@@ -51,7 +58,7 @@ public class TableMetaInfo {
             classNameBuffer.append(split);
         }
         this.className = classNameBuffer.toString();
-        System.out.println(className);
+        setMetaDataList();
     }
 
     public void setMetaDataList() {
@@ -65,6 +72,7 @@ public class TableMetaInfo {
             int columnCount = rsmd.getColumnCount();
             if(columnCount > 0){
                 metaDataList = new ArrayList<MetaData>();
+                propertyTypeSet = new HashSet<String>();
             }
             for(int i = 1 ; i <= columnCount ; i++){
                 MetaData md = new MetaData();
@@ -73,7 +81,7 @@ public class TableMetaInfo {
                 String columnClassName = rsmd.getColumnClassName(i);
                 md.setClassType(columnClassName);
                 String columnTypeName = rsmd.getColumnTypeName(i);
-                md.setClassType(columnTypeName);
+                md.setDataType(columnTypeName);
                 columnName = columnName.toLowerCase();
                 String[] columnSplit = columnName.split("_");
                 StringBuffer columnClassPropertyNameBuffer = new StringBuffer("");
@@ -85,8 +93,8 @@ public class TableMetaInfo {
                     columnClassPropertyNameBuffer.append(split);
                 }
                 md.setColumnClassPropertyName(columnClassPropertyNameBuffer.toString());
-                System.out.println(columnClassPropertyNameBuffer.toString());
                 metaDataList.add(md);
+                propertyTypeSet.add(columnClassName);
             }
         } catch (SQLException e) {
             e.printStackTrace();
