@@ -1,6 +1,6 @@
 package com.dooclo.gen.table;
 
-import com.dooclo.gen.base.ConnectionManager;
+import com.dooclo.gen.jdbc.ConnectionManager;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -101,8 +101,4 @@ public class TableMetaInfo {
         }
     }
 
-    public static void main(String args[]){
-        TableMetaInfo tmi = new TableMetaInfo("wjods","HS_ASSET.BANKARG");
-        tmi.setMetaDataList();
-    }
 }

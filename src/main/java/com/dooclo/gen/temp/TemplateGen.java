@@ -73,10 +73,4 @@ public class TemplateGen {
         }
     }
 
-    public static void main(String args[]){
-
-        TableMetaInfo metaInfo = new TableMetaInfo("wjods","HS_ASSET.BANKARG");
-        TemplateGen tg = new TemplateGen();
-        tg.batchGen(metaInfo);
-    }
 }
