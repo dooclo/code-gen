@@ -10,21 +10,21 @@
 
 	<sql id="${metaInfo.className!}.columns">
 	<#list metaInfo.metaDataList as metaData>
-        ${metaData.columnName!}<#if !metaData_has_next><#else>,</#if>
-    </#list>
+		${metaData.columnName!}<#if !metaData_has_next><#else>,</#if>
+	</#list>
 	</sql>
 
 	<sql id="${metaInfo.className!}.where">
 		<where>
-		<#list metaInfo.metaDataList as metaData>
-            <if test="${metaData.columnClassPropertyName!} != null">
-                and ${metaData.columnName!} = ${r"#"}{${metaData.columnClassPropertyName!}}
-            </if>
-        </#list>
+			<#list metaInfo.metaDataList as metaData>
+			<if test="${metaData.columnClassPropertyName!} != null">
+				and ${metaData.columnName!} = ${r"#"}{${metaData.columnClassPropertyName!}}
+			</if>
+			</#list>
 		</where>
 	</sql>
 
-	<select id="queryByMap" resultMap="RM.${metaInfo.className!}" parameterType="java.util.Map">
+	<select id="queryByMap" resultMap="RM.${metaInfo.className!}" parameterType="java.util.Map" flushCache="false" useCache="true">
 		select <include refid="${metaInfo.className!}.columns"/>
 		from ${metaInfo.tableName}
 		<include refid="${metaInfo.className!}.where"/>
@@ -32,14 +32,34 @@
 
 	<insert id="save" parameterType="${basePackage!}.entity.${metaInfo.className!}Entity">
         insert into ${metaInfo.tableName} (
-        <#list metaInfo.metaDataList as metaData>
-        ${metaData.columnName!}<#if !metaData_has_next><#else>,</#if>
-        </#list>
+			<#list metaInfo.metaDataList as metaData>
+			${metaData.columnName!}<#if !metaData_has_next><#else>,</#if>
+			</#list>
         ) values (
-        <#list metaInfo.metaDataList as metaData>
-        ${r"#"}{${metaData.columnClassPropertyName!}}<#if !metaData_has_next><#else>,</#if>
-        </#list>
+			<#list metaInfo.metaDataList as metaData>
+			${r"#"}{${metaData.columnClassPropertyName!}}<#if !metaData_has_next><#else>,</#if>
+			</#list>
         )
     </insert>
+
+    <update id="update" parameterType="${basePackage!}.entity.${metaInfo.className!}Entity" flushCache="true">
+		update ${metaInfo.tableName}
+		set
+		<#list metaInfo.metaDataList as metaData>
+		<#if !metaData.keyFlag>
+			<if test="${metaData.columnClassPropertyName!} != null">
+				${metaData.columnName!} = ${r"#"}{${metaData.columnClassPropertyName!}}<#if !metaData_has_next><#else>,</#if>
+			</if>
+		</#if>
+		</#list>
+		where
+			1 = 1
+		<#list metaInfo.metaDataList as metaData>
+		<#if metaData.keyFlag>
+			and ${metaData.columnName!} = ${r"#"}{${metaData.columnClassPropertyName!}}
+		</#if>
+		</#list>
+
+	</update>
 
 </mapper>

@@ -9,6 +9,15 @@ public class MetaData {
     private String dataType;
     private String classType;
     private String columnClassPropertyName;
+    private boolean keyFlag;
+
+    public boolean isKeyFlag() {
+        return keyFlag;
+    }
+
+    public void setKeyFlag(boolean keyFlag) {
+        this.keyFlag = keyFlag;
+    }
 
     public String getColumnName() {
         return columnName;

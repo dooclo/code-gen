@@ -47,7 +47,7 @@ public class TableMetaInfo {
         this.tableName = tableName;
         className = tableName;
         if(tableName.indexOf(".") > 0){
-            className = className.substring(tableName.indexOf(".") + 1,tableName.length());
+            className = className.substring(tableName.lastIndexOf(".") + 1,tableName.length());
         }
         className = className.toLowerCase();
         String[] classNameSplit = className.split("_");
@@ -65,10 +65,16 @@ public class TableMetaInfo {
         String sql = "select * from " + this.tableName + " where 1=0";
         Connection conn = ConnectionManager.getConnection(this.dbName);
         try {
+            DatabaseMetaData dmd = conn.getMetaData();
+            Set<String> keys = primaryKeys(dmd,this.tableName);
+            if(keys == null || keys.size() < 1){
+                System.out.println("该表无主键");
+                keys = uniqueIndex(dmd,this.tableName);
+            }
+
             PreparedStatement ps = conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             ResultSetMetaData rsmd = rs.getMetaData();
-
             int columnCount = rsmd.getColumnCount();
             if(columnCount > 0){
                 metaDataList = new ArrayList<MetaData>();
@@ -93,12 +99,59 @@ public class TableMetaInfo {
                     columnClassPropertyNameBuffer.append(split);
                 }
                 md.setColumnClassPropertyName(columnClassPropertyNameBuffer.toString());
+                md.setKeyFlag(keys.contains(columnName));
                 metaDataList.add(md);
                 propertyTypeSet.add(columnClassName);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public Set<String> uniqueIndex(DatabaseMetaData dmd, String tableName){
+        Set<String> uniqueIndexs = new HashSet<String>();
+        try {
+            String schameName = null;
+            String tableNameReal = tableName;
+            if(tableName.indexOf(".") > 0){
+                String [] tableNameSplit = tableName.split("\\.");
+                tableNameReal = tableNameSplit[tableNameReal.length() - 1];
+                schameName = tableNameSplit[tableNameReal.length() - 2];
+            }
+            ResultSet indexRs = dmd.getIndexInfo(null, schameName, tableNameReal, true, false);
+            while(indexRs.next()){
+                Object columnObj = indexRs.getObject(9);
+                if(columnObj != null){
+                   uniqueIndexs.add(columnObj.toString());
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return uniqueIndexs;
+    }
+
+    public Set<String> primaryKeys(DatabaseMetaData dmd, String tableName){
+        Set<String> primaryKeys = new HashSet<String>();
+        try {
+            String schameName = null;
+            String tableNameReal = tableName;
+            if(tableName.indexOf(".") > 0){
+                String [] tableNameSplit = tableName.split("\\.");
+                tableNameReal = tableNameSplit[tableNameReal.length() - 1];
+                schameName = tableNameSplit[tableNameReal.length() - 2];
+            }
+            ResultSet indexRs = dmd.getPrimaryKeys(null, schameName, tableNameReal);
+            while(indexRs.next()){
+                Object columnObj = indexRs.getObject(4);
+                if(columnObj != null){
+                    primaryKeys.add(columnObj.toString());
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return primaryKeys;
     }
 
 }
