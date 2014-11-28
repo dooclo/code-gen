@@ -67,7 +67,7 @@ public class TemplateGen {
                 resourceBaseDirFile.mkdirs();
             }
 
-            genCode(metaInfo, "mybatis-mapper.ftl",resourceBaseDir + File.separator + "mapper-" + metaInfo.getClassName().toLowerCase() + ".java");
+            genCode(metaInfo, "mybatis-mapper.ftl",resourceBaseDir + File.separator + "mapper-" + metaInfo.getClassName().toLowerCase() + ".xml");
         } catch (ConfigurationException e) {
             e.printStackTrace();
         }
