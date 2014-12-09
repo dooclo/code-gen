@@ -85,6 +85,9 @@ public class TableMetaInfo {
                 String columnName = rsmd.getColumnName(i);
                 md.setColumnName(columnName);
                 String columnClassName = rsmd.getColumnClassName(i);
+                if("java.sql.Date".equals(columnClassName) || "java.sql.Timestamp".equals(columnClassName)){
+                    columnClassName = "java.util.Date";
+                }
                 md.setClassType(columnClassName);
                 String columnTypeName = rsmd.getColumnTypeName(i);
                 md.setDataType(columnTypeName);
