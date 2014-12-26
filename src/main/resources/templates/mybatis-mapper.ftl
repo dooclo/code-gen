@@ -45,6 +45,7 @@
     <update id="update" parameterType="${basePackage!}.entity.${metaInfo.className!}Entity" flushCache="true">
 		update ${metaInfo.tableName}
 		set
+		<set>
 		<#list metaInfo.metaDataList as metaData>
 		<#if !metaData.keyFlag>
 			<if test="${metaData.columnClassPropertyName!} != null">
@@ -52,6 +53,7 @@
 			</if>
 		</#if>
 		</#list>
+		</set>
 		where
 			1 = 1
 		<#list metaInfo.metaDataList as metaData>
