@@ -10,6 +10,15 @@ public class MetaData {
     private String classType;
     private String columnClassPropertyName;
     private boolean keyFlag;
+    private String remark;
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 
     public boolean isKeyFlag() {
         return keyFlag;

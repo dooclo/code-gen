@@ -52,7 +52,7 @@ public class TemplateGen {
                 entityDirFile.mkdirs();
             }
             genCode(metaInfo, "entity.ftl",entityDir + File.separator + metaInfo.getClassName() + "Entity.java");
-            String classMapperDir = srcBaseDir + File.separator + packageDir + File.separator + "model" + File.separator + "mapper";
+            String classMapperDir = srcBaseDir + File.separator + packageDir + File.separator + "mapper";
 
             File classMapperDirFile = new File(classMapperDir);
             if(!classMapperDirFile.exists()){

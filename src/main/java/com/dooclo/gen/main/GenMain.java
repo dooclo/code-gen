@@ -9,9 +9,8 @@ import com.dooclo.gen.temp.TemplateGen;
 public class GenMain {
 
     public static void main(String args[]){
-        TableMetaInfo metaInfo = new TableMetaInfo("test1","test");
-        TemplateGen tg = new TemplateGen();
-        tg.batchGen(metaInfo);
+        TableMetaInfo metaInfo = new TableMetaInfo("account","preclient_info");
+        new TemplateGen().batchGen(metaInfo);
     }
 
 }

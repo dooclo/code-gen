@@ -5,11 +5,11 @@ import java.io.Serializable;
 import ${propertyType!};
 </#list>
 
- /**
+/**
   *
   *	@author ${author!}
   * @since  ${.now}.
-  */
+*/
 public class ${metaInfo.className!}Entity implements Serializable {
 
 <#list metaInfo.metaDataList as metaData>

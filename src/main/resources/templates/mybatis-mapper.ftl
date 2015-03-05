@@ -44,7 +44,6 @@
 
     <update id="update" parameterType="${basePackage!}.entity.${metaInfo.className!}Entity" flushCache="true">
 		update ${metaInfo.tableName}
-		set
 		<set>
 		<#list metaInfo.metaDataList as metaData>
 		<#if !metaData.keyFlag>
